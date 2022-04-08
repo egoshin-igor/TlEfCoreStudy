@@ -9,6 +9,5 @@ namespace Blogs.Application.Repositories
         void DeleteById( int id );
         Author GetById( int id );
         List<Author> GetAll();
-        void Update( Author author );
     }
 }

@@ -1,5 +1,10 @@
+using Blogs.Application;
+using Blogs.Application.Repositories;
+using Blogs.Infrastructure;
+using Blogs.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -16,9 +21,13 @@ namespace Blogs
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices( IServiceCollection services )
         {
+            services.AddDbContext<BlogsDbContext>( x =>
+                x.UseSqlServer( Configuration.GetConnectionString( "BlogsConnection" ) ) );
+            services.AddScoped<IAuthorRepository, AuthorRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             services.AddControllers();
             services.AddSwaggerGen( c =>
              {
@@ -26,7 +35,6 @@ namespace Blogs
              } );
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure( IApplicationBuilder app, IWebHostEnvironment env )
         {
             if ( env.IsDevelopment() )
@@ -39,9 +47,9 @@ namespace Blogs
             app.UseRouting();
 
             app.UseEndpoints( endpoints =>
-             {
-                 endpoints.MapControllers();
-             } );
+            {
+                endpoints.MapControllers();
+            } );
         }
     }
 }
