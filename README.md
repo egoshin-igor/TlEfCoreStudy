@@ -19,19 +19,19 @@ v2 - конечная версия проекта с миграциями, ef co
 **Операции с миграциями.** Для того, чтобы создавать/выполнять/откатывать миграции нужно открыть Package manager console. В VS для этого нужно - нажать View -> Other windows -> Package manager console.
 Основные операции:
 
-- add-migration <migration-name> - добавляет новую миграцию;
-- update-migration - выполняет все невыполненные миграции;
-- update-migration <migration-name> - откат миграций до <migration-name> невключительно;
-- update-migration 0 - откат всех миграций;
+- add-migration \<migration-name> - добавляет новую миграцию;
+- update-database - выполняет все невыполненные миграции;
+- update-database \<migration-name> - откат миграций до \<migration-name> невключительно;
+- update-database 0 - откат всех миграций;
 - remove-migration - удаление последней миграций;
 
-**DbContext** - контекст нашей базы данных. В этом классе находятся применяемые конфигурации сущностей, доступ к сущностям через dbContext.Set<Entity>(), коммит всех изменений в базу - dbContext.SaveChanges();
+**DbContext** - контекст нашей базы данных. В этом классе находятся применяемые конфигурации сущностей, доступ к сущностям через dbContext.Set\<Entity>(), коммит всех изменений в базу - dbContext.SaveChanges();
 
 - Может работать с многими базами;
 - DbContext - как база для нас будет;
-- dbContext.Set<Entity>() доступ к таблице с названием Entity;
+- dbContext.Set\<Entity>() доступ к таблице с названием Entity;
 
-**IEntityTypeConfiguration<Entity>** - интерфейс, в реализации которого настраивается наша сущность для базы данных - длина строки, тип столбца у поля, внешние ключи, первичный ключ, индексы и т.п.
+**IEntityTypeConfiguration\<Entity>** - интерфейс, в реализации которого настраивается наша сущность для базы данных - длина строки, тип столбца у поля, внешние ключи, первичный ключ, индексы и т.п.
 
 **Linq** (language integrated query)- язык запросов на уровне языка C#. Похож по синтаксису и терминам на SQL.
 Linq запрос превращается в SQL-запрос, происходит выполнение запроса. Результат превращается в список объектов. Выполнение запроса не происходит пока не вызовится ToList(), FirstOrDefault(), Any() и асинхронные версии методов. Linq можно использовать не только через dbContext, а почти с любыми коллекциями.
@@ -40,6 +40,14 @@ Linq запрос превращается в SQL-запрос, происход
 - `List<User> users = _dbContext.Set<User>().Where(e => e.Age >= 18).ToList();` - получить всех пользователей возраст которых больше или равно 18.
   Эквивалентно - `select * from [User] where Age >= 18`.
 - `User user = _dbContext.Set<User>().FirstOrDefault(e => e.Id >= 5);` - получить пользователя Id которого равен 5.
+
+## Зависимости
+
+Microsoft.EntityFrameworkCore - зависимость, позволяющая использовать EfCore
+
+Microsoft.EntityFrameworkCore.SqlServer - зависимость, позволяющая использовать MsSqlServer в EfCore
+
+Microsoft.EntityFrameworkCore.Tools - зависимость, нужная для управления миграциями через Package manager console
 
 ## Домашнее задание
 
